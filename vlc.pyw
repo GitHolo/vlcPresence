@@ -8,7 +8,7 @@ from pypresence.types import ActivityType
 
 # --- CONFIG ---
 CLIENT_ID = "1554906001743024210"
-VLC_PASSWORD = "YOUR_PASSWORD_HERE"  # Set this in VLC's web interface (Tools > Preferences > Show Settings: All > Interface > Main interfaces > Lua > Lua HTTP > Password)
+VLC_PASSWORD = os.getenv("VLC_PASSWORD", "YOUR_PASSWORD_HERE")  # Set this in VLC's web interface (Tools > Preferences > Show Settings: All > Interface > Main interfaces > Lua > Lua HTTP > Password)
 VLC_URL = "http://127.0.0.1:8080/requests/status.json"
 DEFAULT_VLC_ICON = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/VLC_media_player.svg/512px-VLC_media_player.svg.png"
 
@@ -22,7 +22,6 @@ def format_time(seconds):
     return f"{h}:{m:02d}:{s:02d}" if h > 0 else f"{m:02d}:{s:02d}"
 
 def clean_movie_filename(raw_text):
-
     base, ext = os.path.splitext(raw_text)
     if ext.lower() in {".mkv", ".mp4", ".avi", ".mov", ".webm", ".flv", ".wmv"} | AUDIO_EXTENSIONS:
         raw_text = base
@@ -67,7 +66,7 @@ def get_media_metadata(raw_title, filename, artist=None):
                         rel_year = item.get("y") or year
                         formatted_title = f"{official_title} ({rel_year})" if rel_year else official_title
                         
-                        # Resize IMDb poster to 500px wide so Discord loads it quickly
+                        
                         poster = re.sub(r"\._V1_.*\.jpg$", "._V1_SX500.jpg", item["i"]["imageUrl"])
                         cast_info = item.get("s", "")
 
@@ -120,8 +119,18 @@ def get_media_metadata(raw_title, filename, artist=None):
 
 # --- MAIN LOOP ---
 rpc = Presence(CLIENT_ID)
-rpc.connect()
-print("Connected to Discord RPC. Checking VLC on 127.0.0.1:8080...")
+
+def connect_discord():
+    while True:
+        try:
+            rpc.connect()
+            print("Connected to Discord RPC.")
+            break
+        except Exception:
+            time.sleep(5)
+
+connect_discord()
+print("Checking VLC on 127.0.0.1:8080...")
 
 while True:
     try:

@@ -15,6 +15,7 @@ save your settings and restart vlc
 **2. dependencies**
 you need python. obviously.
 open your terminal in the folder and run:
+
 `pip install pypresence requests`
 
 **3. passwords and config**
@@ -23,7 +24,9 @@ you can either set `VLC_PASSWORD` on your os, or just open `vlc.pyw` and hardcod
 if you hardcode it, just don't push it back to github. 
 
 **4. running it**
-if you want to test it with a terminal open, run `python vlc.py`
+if you want to test it with a terminal open, run 
+
+`python vlc.py`
 
 if you want it to run silently in the background so you don't have to look at it or keep your editor open, use the `.pyw` version. it hides the window.
 just double click `vlc.pyw` to start it.

@@ -16,7 +16,9 @@ save your settings and restart vlc
 you need python. obviously.
 open your terminal in the folder and run:
 
-```pip install pypresence requests```
+```sh
+pip install pypresence requests
+```
 
 **3. passwords and config**
 the script looks for your vlc password in your environment variables.
